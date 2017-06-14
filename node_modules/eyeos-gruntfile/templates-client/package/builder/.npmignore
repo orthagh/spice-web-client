@@ -1,0 +1,2 @@
+# info folder has been obsoleted: info is extracted directly from package.json
+/info/

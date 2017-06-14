@@ -1,0 +1,14 @@
+sonar.projectKey={{projectName}}
+sonar.projectName={{projectName}}
+sonar.projectVersion=1.0.0
+sonar.sources=src/lib
+sonar.tests=src/test
+sonar.language=js
+sonar.dynamicAnalysis=reuseReports
+sonar.javascript.jstest.reportsPath=build/reports
+sonar.javascript.lcov.reportPath=build/reports/lcov.info
+sonar.exclusions=**/node_modules/**/*, \
+    **/test/**/*, \
+    **/component-test/**/*, \
+    **/build/**/*, \
+    **/doc/**/*

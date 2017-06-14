@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+set -u
+
+# use this script if you need to do something, or remove it if it is not necessary
+# REMEMBER to change the name to pre-finish (without extension)

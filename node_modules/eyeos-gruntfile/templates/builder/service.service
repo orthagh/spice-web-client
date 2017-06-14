@@ -1,0 +1,19 @@
+
+[Unit]
+Description={{projectName}} service
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=notify
+NotifyAccess=all
+# Environment setting can be specified more than once (see systemd.exec(5))
+Environment="{{projectNameUpper}}_INSTALL_PATH=/opt/eyeos-{{projectName}}"
+Environment="LOG4JS_CONFIG=/opt/eyeos-{{projectName}}/log4js.config.json"
+EnvironmentFile=/opt/eyeos-{{projectName}}/envars
+ExecStart=/opt/eyeos-{{projectName}}/eyeos-{{projectName}}.js
+Restart=always
+RestartSec=1
+StartLimitInterval=0

@@ -43,6 +43,7 @@ Application = $.spcExtend(wdi.DomainObject, {
     busConnection: null,
     busProcess: null,
 	timeLapseDetector: null,
+    isFS: false,
 
     init: function (c) {
         wdi.GlobalPool.init();
@@ -442,6 +443,84 @@ Application = $.spcExtend(wdi.DomainObject, {
                 ]
 
             ], "keyup"); //ctrl up
+        } else if (shortcut == wdi.keyShortcutsHandled.CTRLALTDEL) {
+            this.inputProcess.send([
+                "keydown",
+                [
+                    {
+                        'generated': true,
+                        'type': "keydown",
+                        'keyCode': 17,
+                        'charCode': 0
+                    }
+                ]
+
+            ], "keydown"); //ctrl down
+
+            this.inputProcess.send([
+                "keydown",
+                [
+                    {
+                        'generated': true,
+                        'type': "keydown",
+                        'keyCode': 18,
+                        'charCode': 0
+                    }
+                ]
+
+            ], "keydown"); //alt down
+
+            this.inputProcess.send([
+                "keydown",
+                [
+                    {
+                        'generated': true,
+                        'type': "keydown",
+                        'keyCode': 46,
+                        'charCode': 0
+                    }
+                ]
+
+            ], "keydown"); //del down
+
+            this.inputProcess.send([
+                "keyup",
+                [
+                    {
+                        'generated': true,
+                        'type': "keyup",
+                        'keyCode': 46,
+                        'charCode': 0
+                    }
+                ]
+
+            ], "keyup"); //del up
+
+            this.inputProcess.send([
+                "keyup",
+                [
+                    {
+                        'generated': true,
+                        'type': "keyup",
+                        'keyCode': 18,
+                        'charCode': 0
+                    }
+                ]
+
+            ], "keyup"); //alt up
+
+            this.inputProcess.send([
+                "keyup",
+                [
+                    {
+                        'generated': true,
+                        'type': "keyup",
+                        'keyCode': 17,
+                        'charCode': 0
+                    }
+                ]
+
+            ], "keyup"); //ctrl up
         }
     },
 
@@ -469,6 +548,119 @@ Application = $.spcExtend(wdi.DomainObject, {
 
     setCurrentWindow: function(wnd) {
         this.clientGui.inputManager.setCurrentWindow(wnd);
+    },
+
+    toggleFullScreen: function() {
+        var elem_fs    = document.body,
+            availa_fs  = document.fullscreenEnabled
+                      || document.webkitFullscreenEnabled
+                      || document.mozFullScreenEnabled
+                      || document.msFullscreenEnabled,
+            request_fs = elem_fs.requestFullscreen
+                      || elem_fs.webkitRequestFullScreen
+                      || elem_fs.mozRequestFullScreen
+                      || elem_fs.msRequestFullscreen;
+            cancel_fs  = document.exitFullscreen
+                      || document.webkitExitFullscreen
+                      || document.mozCancelFullScreen
+                      || document.msExitFullscreen;
+
+        if (availa_fs) {
+            if (this.isFS) {
+                this.isFS = false;
+                cancel_fs.call(document);
+                $("#login #set-fullscreen").removeClass("pinned");
+            } else {
+                this.isFS = true;
+                request_fs.call(elem_fs);
+                $("#login #set-fullscreen").addClass("pinned");
+            }
+        } else {
+            alert(tr["no_auto_fs"]);
+        }
+    },
+
+    toggleMenuBar: function() {
+        var width = $(window).width();
+        var height = $(window).height();
+
+        var canvas = $('#canvas_0');
+        var eventLayer = $('#eventLayer');
+
+        if ($("#login").attr("class") == "") {
+            $("#login").addClass("hidden");
+            $("#login #pin").removeClass("pinned");
+
+            if (canvas.length && eventLayer.length) {
+                canvas.css("top", "0");
+                eventLayer.css("top", "0");
+                this.clientGui.setCanvasMargin({"x": 0, "y": 0})
+                this.clientGui.setClientOffset(0, 0);
+                this.sendCommand('setResolution', {
+                    'width': width,
+                    'height': height
+                });
+            }
+        } else {
+            if (canvas.length && eventLayer.length) {
+                canvas.css("top", "40px");
+                eventLayer.css("top", "40px");
+                this.clientGui.setCanvasMargin({"x": 0, "y": 40})
+                this.clientGui.setClientOffset(0, -40);
+                this.sendCommand('setResolution', {
+                    'width': width,
+                    'height': height - 40
+                });
+            }
+            $("#login").attr("class", "");
+            $("#login #pin").addClass("pinned");
+        }
+    },
+
+    showMenuBar: function() {
+        if ($("#login").hasClass("hidden")) {
+            $("#login").attr("class", "").addClass("hidden-peek");
+        }
+    },
+
+    hideMenuBar: function() {
+        if ($("#login").hasClass("hidden-peek")) {
+            $("#login").attr("class", "").addClass('hidden');
+        }
+    },
+
+    closeSession: function() {
+        this.disconnect();
+        if (this.isFS) {
+            this.toggleFullScreen();
+        }
+
+        $("#overlay").css("visibility", "visible");
+        $("#overlay").css("opacity", "1");
+        $("#dialog-end").css("visibility", "visible");
+    },
+
+    showCloseDialog: function() {
+        $("#overlay").css("visibility", "visible");
+        $("#dialog-close").css("visibility", "visible");
+    },
+
+    closeAction: function(close) {
+        $("#overlay").css("visibility", "hidden");
+        $("#dialog-close").css("visibility", "hidden");
+        if (close) {
+            this.closeSession();
+        } else if (this.isFS) {
+            this.toggleFullScreen();
+        }
+    },
+
+    overlayAction: function(fullscreen) {
+        $("#overlay").css("visibility", "hidden");
+        if (fullscreen) {
+            this.toggleMenuBar();
+            this.toggleFullScreen();
+        }
     }
 });
 

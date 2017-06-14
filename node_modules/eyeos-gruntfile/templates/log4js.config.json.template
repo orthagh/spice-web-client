@@ -1,0 +1,9 @@
+{
+	"appenders": [
+		{
+			"type": "file",
+			"filename": "/var/log/eyeos/{{projectName}}/{{projectName}}.log"
+		}
+	],
+	"replaceConsole": true
+}

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+set -u
+
+# if you want to use this hook remove the .sample extension and add your code

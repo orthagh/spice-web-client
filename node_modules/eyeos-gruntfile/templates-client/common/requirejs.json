@@ -1,0 +1,23 @@
+{
+	"options": {
+		"baseUrl": "app",
+		"name": "src/main",
+		"paths": {
+			"src": "scripts"
+		},
+		"optimizeAllPluginResources": true,
+		"optimize": "none",
+		"wrap": true
+	},
+	"debug": {
+		"options": {
+			"out": "<%= dirs.dist %>/<%= pkg.name %>.js"
+		}
+	},
+	"release": {
+		"options": {
+			"out": "<%= dirs.dist %>/<%= pkg.name %>.min.js",
+			"optimize": "uglify"
+		}
+	}
+}

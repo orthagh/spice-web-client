@@ -6,6 +6,7 @@
   "author": "eyeOS",
   "homepage": "http://www.eyeos.com",
   "dependencies": {
+    "font-awesome": "^4.7.0"
   },
   "devDependencies": {
     "eyeos-gruntfile": "*",

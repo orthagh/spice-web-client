@@ -1,5 +1,6 @@
 wdi.keyShortcutsHandled = {
-    CTRLV: 0
+    CTRLV: 0,
+    CTRALTDEL: 1
 }
 
 wdi.Keymap = {

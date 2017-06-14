@@ -1,0 +1,8 @@
+/node_modules
+.idea
+/app/bower_components
+/build
+/builder/contents
+/builder/log
+commit.properties
+/pkgs

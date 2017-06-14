@@ -107,6 +107,7 @@ must display the words "Powered by eyeos" and retain the original copyright noti
         <script src="application/rasteroperation.js"></script>
         <script src="application/stream.js"></script>
         <script src="application/inputmanager.js"></script>
+        <script src="application/translations.js"></script>
         <script src="process/busprocess.js"></script>
         <script src="process/displayprocess.js"></script>
         <script src="process/displaypreprocess.js"></script>
@@ -124,53 +125,41 @@ must display the words "Powered by eyeos" and retain the original copyright noti
         <!-- end core -->
         <meta content="yes" name="apple-mobile-web-app-capable" />
 
-        <style type="text/css">
-            body {
-                background-color:black;
-                padding:0;
-                margin:0;
-            }
-
-            #integrationBenchmark {
-                display: none;
-                position:absolute;
-                z-index: 10000000000000000000000000;
-                top:0;
-                right:0;
-                bottom:0;
-                left:0;
-                text-align: center;
-                background-color: rgba(0, 0, 0, 0.2);
-            }
-
-            #integrationBenchmark .closeButton {
-                position: absolute;
-                top: 0;
-                right: 0;
-                padding: 5px;
-                background-color: #fff;
-                color: #000;
-                cursor: pointer;
-            }
-
-            #integrationBenchmark .result {
-                font-size: 4em;
-                font-weight: bold;
-                position: absolute;
-                top: 50%;
-                left: 35%;
-                color: #0f0;
-                background-color: #fff;
-            }
-
-            #launchWordButton {
-                position:absolute;
-                top:50%;
-            }
-
-        </style>
+        <link rel="stylesheet" type="text/css" href="spice.css">
+        <link rel="stylesheet" type="text/css" href="node_modules/font-awesome/css/font-awesome.min.css">
     </head>
     <body>
+        <div id="login"
+             onMouseOver="app.showMenuBar();"
+             onMouseOut="app.hideMenuBar();">
+            <span class="logo"></span>
+            <div class="float-right">
+                <i class="fa fa-thumb-tack pinned" id="pin"
+                   onclick="app.toggleMenuBar();"></i>
+                <i class="fa fa-arrows-alt" id="set-fullscreen"
+                   onclick="app.toggleFullScreen();"></i>
+                <button id="ctrlaltdel"
+                        onclick="app.sendShortcut(wdi.keyShortcutsHandled.CTRLALTDEL);"></button>
+                <i class="fa fa-window-close"
+                   onclick="app.showCloseDialog()"></i>
+            </div>
+        </div>
+
+        <div id="overlay"></div>
+
+        <div id="dialog-close" class="overlay-dialog">
+            <div id="dialog_close_text" class="overlay-text"></div>
+            <div id="dialog-close-input" class="overlay-input">
+                <button class="tr-accept" type="button"
+                        onclick="app.closeAction(true)"></button>
+                <button class="tr-cancel cancel"  type="button"
+                        onclick="app.closeAction(false)"></button>
+            </div>
+        </div>
+        <div id="dialog-end" class="overlay-dialog">
+            <div id="dialog_end_text" class="overlay-text-end"></div>
+        </div>
+
         <div id="testVdi"></div>
         <input type="button" value="getStats" style="display:none;position:absolute;top:0px;right:0px;z-index:100;width:200px;height:200px;" id="getStats" />
         <input type="text" id="hiddeninput" style="display:none;opacity:0;font-size: 60px;color:transparent"/>
