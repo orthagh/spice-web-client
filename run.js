@@ -274,9 +274,4 @@ function closeIntegrationBenchmark () {
 	$('#integrationBenchmark').hide();
 }
 
-
-document.addEventListener("mozfullscreenchange", function () {
-    (document.mozFullScreen) ? app.isFullScreen() : app.notFullScreen();
-}, false);
-
 $(document).ready(start);
