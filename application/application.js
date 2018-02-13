@@ -581,39 +581,45 @@ Application = $.spcExtend(wdi.DomainObject, {
     },
 
     toggleMenuBar: function() {
-        var width = $(window).width();
-        var height = $(window).height();
-
-        var canvas = $('#canvas_0');
-        var eventLayer = $('#eventLayer');
-
-        if ($("#login").attr("class") == "") {
-            $("#login").addClass("hidden");
-            $("#login #pin").removeClass("pinned");
-
-            if (canvas.length && eventLayer.length) {
-                canvas.css("top", "0");
-                eventLayer.css("top", "0");
-                this.clientGui.setCanvasMargin({"x": 0, "y": 0})
-                this.clientGui.setClientOffset(0, 0);
-                this.sendCommand('setResolution', {
-                    'width': width,
-                    'height': height
-                });
-            }
-        } else {
-            if (canvas.length && eventLayer.length) {
-                canvas.css("top", "40px");
-                eventLayer.css("top", "40px");
-                this.clientGui.setCanvasMargin({"x": 0, "y": 40})
-                this.clientGui.setClientOffset(0, -40);
-                this.sendCommand('setResolution', {
-                    'width': width,
-                    'height': height - 40
-                });
-            }
+        if (!this.isMenuBarPinned()) {
             $("#login").attr("class", "");
             $("#login #pin").addClass("pinned");
+            this.resizeScreen();
+        } else {
+            $("#login").addClass("hidden");
+            $("#login #pin").removeClass("pinned");
+            this.resizeScreen();
+        }
+    },
+
+    isMenuBarPinned: function() {
+        if ($("#login #pin").hasClass("pinned")) {
+            return true
+        } else {
+            return false;
+        }
+    },
+
+    resizeScreen: function () {
+        var width = $(window).width();
+        var height = $(window).height();
+        var canvas = $('#canvas_0');
+        var eventLayer = $('#eventLayer');
+        var offset_y = 0;
+        if (this.isMenuBarPinned()) {
+            offset_y = 40;
+        }
+
+        if (canvas.length && eventLayer.length) {
+            canvas.css("top", offset_y + "px");
+            eventLayer.css("top", offset_y + "px");
+
+            this.clientGui.setCanvasMargin({"x": 0, "y": offset_y})
+            this.clientGui.setClientOffset(0, -offset_y);
+            this.sendCommand('setResolution', {
+                'width': width,
+                'height': (height - offset_y)
+            });
         }
     },
 

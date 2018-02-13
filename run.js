@@ -150,6 +150,14 @@ function start () {
 			app.clientGui.setCanvasMargin({"x": 0, "y": 40})
 			app.clientGui.setClientOffset(0, -40);
 
+		    $(document)
+		    	.on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', 
+		    	function() {
+		    		setTimeout(function() {
+		    			app.resizeScreen();
+		    		}, 500);
+		    	});
+
 			if (wdi.IntegrationBenchmarkEnabled) {
 				$('#integrationBenchmark').css({'display': 'inline'});
 				$('#launchWordButton').prop('disabled', false);
