@@ -129,19 +129,23 @@ must display the words "Powered by eyeos" and retain the original copyright noti
         <link rel="stylesheet" type="text/css" href="node_modules/font-awesome/css/font-awesome.min.css">
     </head>
     <body>
-        <div id="login" class="hidden"
+        <div id="login" class=""
              onMouseOver="app.showMenuBar();"
              onMouseOut="app.hideMenuBar();">
             <span class="logo"></span>
             <div class="float-right">
-                <i class="fa fa-thumb-tack" id="pin"
+                <i class="fa fa-thumb-tack pinned" id="pin"
                    onclick="app.toggleMenuBar();"></i>
                 <i class="fa fa-arrows-alt" id="set-fullscreen"
                    onclick="app.toggleFullScreen();"></i>
-                <button id="ctrlaltdel"
-                        onclick="app.sendShortcut(wdi.keyShortcutsHandled.CTRLALTDEL);"></button>
                 <i class="fa fa-window-close"
                    onclick="app.showCloseDialog()"></i>
+                <i class="fa fa-ellipsis-h" id="more-commands-toggle"
+                   onclick="app.moreCommands();"></i>
+                <div class="more_commands" id="more-commands">
+                    <button id="ctrlaltdel"
+                            onclick="app.sendShortcut(wdi.keyShortcutsHandled.CTRLALTDEL);"></button>
+                </div>
             </div>
         </div>
 

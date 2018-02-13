@@ -629,6 +629,10 @@ Application = $.spcExtend(wdi.DomainObject, {
         }
     },
 
+    moreCommands: function() {
+        $("#more-commands").toggle();
+    },
+
     closeSession: function() {
         this.disconnect();
         if (this.isFS) {

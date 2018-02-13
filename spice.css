@@ -143,6 +143,15 @@ body {
     background-image:url(resources/button-close-highlight.png);
 }
 
+#login .more_commands {
+    position: absolute;
+    display: none;
+    background-color: rgb(0, 161, 193);
+    top: 40px;
+    right: 0;
+    padding: 5px 2px;
+}
+
 #overlay {
     visibility: hidden;
     position: absolute;

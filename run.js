@@ -145,8 +145,11 @@ function start () {
 
 			app.sendCommand('setResolution', {
 				'width': width,
-				'height': height
+				'height': height - 40
 			});
+			app.clientGui.setCanvasMargin({"x": 0, "y": 40})
+			app.clientGui.setClientOffset(0, -40);
+
 			if (wdi.IntegrationBenchmarkEnabled) {
 				$('#integrationBenchmark').css({'display': 'inline'});
 				$('#launchWordButton').prop('disabled', false);
