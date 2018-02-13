@@ -177,8 +177,8 @@ wdi.KeymapFR = function() {
     // combination keys with ctrl
     var ctrlKeymapFR = [];
 
-    ctrlKeymapFR[81]                = 0x10; // q
-    ctrlKeymapFR[87]                = 0x11; // z
+    ctrlKeymapFR[65]                = 0x10; // a
+    ctrlKeymapFR[87]                = 0x2C; // z
     ctrlKeymapFR[69]                = 0x12; // e
     ctrlKeymapFR[82]                = 0x13; // r
     ctrlKeymapFR[84]                = 0x14; // t
@@ -187,7 +187,7 @@ wdi.KeymapFR = function() {
     ctrlKeymapFR[73]                = 0x17; // i
     ctrlKeymapFR[79]                = 0x18; // o
     ctrlKeymapFR[80]                = 0x19; // p
-    ctrlKeymapFR[65]                = 0x1E; // q
+    ctrlKeymapFR[81]                = 0x1E; // q
     ctrlKeymapFR[83]                = 0x1F; // s
     ctrlKeymapFR[68]                = 0x20; // d
     ctrlKeymapFR[70]                = 0x21; // f
@@ -197,7 +197,7 @@ wdi.KeymapFR = function() {
     ctrlKeymapFR[75]                = 0x25; // k
     ctrlKeymapFR[76]                = 0x26; // l
     ctrlKeymapFR[77]                = 0x27; // m
-    ctrlKeymapFR[90]                = 0x2C; // w
+    ctrlKeymapFR[90]                = 0x11; // w
     ctrlKeymapFR[88]                = 0x2D; // x
     ctrlKeymapFR[67]                = 0x2E; // c
     //ctrlKeymapFR[86]                = 0x2F; // v      to enable set disableClipboard = true in run.js
