@@ -48,7 +48,7 @@ body {
 
 * { margin: 0; }
 
-#login
+#toolbar
 {
     position: absolute;
     top: 0px;
@@ -69,16 +69,24 @@ body {
     -moz-box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.28);
     box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.28);
 }
-#login.hidden
+#toolbar #login {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 3px;
+}
+#toolbar #login.disabled {
+    opacity: .3;
+}
+#toolbar.hidden
 {
     position: fixed;
     margin-top: -34px;
 }
-#login.hidden-peek
+#toolbar.hidden-peek
 {
     position: fixed;
 }
-#login span.logo
+#toolbar span.logo
 {
     display: inline-block;
     margin: 2.5px;
@@ -87,14 +95,14 @@ body {
     background-size: cover;
 }
 
-#login .float-right
+#toolbar .float-right
 {
     float:right;
     margin-right: .5em;
     margin-top: .25em;
 }
-#login label { color: #ffffff; text-shadow: 1px 1px 0px rgba(175, 210, 220, 0.8); }
-#login input
+#toolbar label { color: #ffffff; text-shadow: 1px 1px 0px rgba(175, 210, 220, 0.8); }
+#toolbar input
 {
     padding: 5px;
     background-color: #fAfAfA;
@@ -105,12 +113,12 @@ body {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
-#login input#host { width: 200px; }
-#login input#port { width: 75px; }
-#login input#password { width: 100px; }
+#toolbar input#host { width: 200px; }
+#toolbar input#port { width: 75px; }
+#toolbar input#password { width: 100px; }
 
-#login i,
-#login button
+#toolbar i,
+#toolbar button
 {
     padding: 5px 10px 5px 10px;
     margin-top: 3px;
@@ -122,28 +130,28 @@ body {
     color: rgba(255, 255, 255, 0.8);
     -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
 }
-#login i:hover,
-#login button:hover
+#toolbar i:hover,
+#toolbar button:hover
 {
     background-color: rgba(0, 0, 0, 0.1);
     color: rgba(255, 255, 255, 1);
 }
-#login i.pinned {
+#toolbar i.pinned {
     background-color: rgba(0, 0, 0, 0.5);
 }
-#login button#close
+#toolbar button#close
 {
     background-position: 50% 50%;
     background-size: 50%;
     background-image:url(resources/button-close.png);
     background-repeat: no-repeat;
 }
-#login button#close:hover
+#toolbar button#close:hover
 {
     background-image:url(resources/button-close-highlight.png);
 }
 
-#login .more_commands {
+#toolbar .more_commands {
     position: absolute;
     display: none;
     background-color: rgb(0, 161, 193);

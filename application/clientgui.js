@@ -533,13 +533,8 @@ wdi.ClientGui = $.spcExtend(wdi.EventObject.prototype, {
 
 	showError: function(message) {
 		wdi.Debug.warn(message);
-		$('<div/>', {
-			id: 'error'
-		}).html(message).css({
-				'background-color': '#ff4141'
-			}).appendTo('body');
-
-		setTimeout("$('#error').remove()", 2000);
+		$("#error-text").html(message);
+		$("#error, #overlay").css("visibility", "visible");
 	},
 
 	generateEvent: function(event, params) {

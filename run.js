@@ -29,22 +29,14 @@ eyeos" logo and retain the original copyright notice. If the display of the
 logo is not reasonably feasible for technical reasons, the Appropriate Legal Notices
 must display the words "Powered by eyeos" and retain the original copyright notice.
  */
-function getURLParameter (name) {
-	return decodeURIComponent(
-		(new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)')
-			.exec(location.search) || [, ""])[1]
-			.replace(/\+/g, '%20')
-	) || null;
-}
-
-
 wdi.Debug.debug = false; //enable logging to javascript console
 wdi.exceptionHandling = false; //disable "global try catch" to improve debugging
 //if enabled, console errors do not include line numbers
 //wdi.SeamlessIntegration = false; //enable window integration. (if disabled, full desktop is received)
 
 wdi.IntegrationBenchmarkEnabled = false;// MS Excel loading time benchmark
-
+var performanceTest = getURLParameter('performanceTest') || false;
+var runCallback;
 
 function translate() {
 	var langs = navigator.languages || [navigator.language || navigator.userLanguage];
@@ -63,6 +55,8 @@ function translate() {
 	for (var key in tr) {
 		$('#' + key).append(tr[key]);
 		$('.tr-' + key).append(tr[key]);
+		$('.tr-ph-' + key).attr('placeholder', tr[key]);
+		$('.tr-ti-' + key).attr('title', tr[key]);
 	}
 }
 
@@ -85,12 +79,14 @@ function start () {
 	});
 
 	wdi.graphicDebug = new wdi.GraphicDebug({debugMode: false});
-	app = new Application();
+	if (typeof app == "undefined") {
+		app = new Application();
+	}
 
 	window.vdiLoadTest = getURLParameter('vdiLoadTest') || false;
-	var performanceTest = getURLParameter('performanceTest') || false;
 
-	var f = function (action, params) {
+	runCallback = function (action, params) {
+		console.log(action, params);
 		if (action == 'windowClosed') {
 			$(params.canvas).remove();
 			$(params.eventLayer).remove();
@@ -129,6 +125,9 @@ function start () {
 		} else if (action == 'ready') {
 			var width = $(window).width();
 			var height = $(window).height();
+
+			app.loginFormReadOnly(true);
+			createCookie("data", JSON.stringify(app.data));
 
 			// launch tests
 			if (performanceTest) {
@@ -230,6 +229,10 @@ function start () {
 		});
 	});
 
+	doRun();
+}
+
+doRun = function() {
 	var useWorkers = true;
 
 	if (performanceTest) {
@@ -238,15 +241,21 @@ function start () {
 		jQuery.getScript("performanceTests/lib/testlauncher.js");
 		jQuery.getScript("performanceTests/tests/wordscroll.js");
 	}
+
+	if (app.data.host.length == 0) {
+		app.loginFormReadOnly(false);
+		return;
+	}
+
 	app.run({
-		'callback': f,
+		'callback': runCallback,
 		'context': this,
-		'host': getURLParameter('host') || '10.11.12.100',
-		'port': getURLParameter('port') || 8000,
-		'protocol': getURLParameter('protocol') || 'ws',
-		'token': getURLParameter('password') || '',
-		'vmHost': getURLParameter('vmhost') || false,
-		'vmPort': getURLParameter('vmport') || false,
+		'host': app.data.host,
+		'port': app.data.port,
+		'protocol': app.data.protocol,
+		'token': app.data.password,
+		'vmHost': app.data.vmhost,
+		'vmPort': app.data.vmport,
 		'useBus': false,
 		'busHost': '10.11.12.200',
 		'busPort': 61613,
@@ -258,7 +267,7 @@ function start () {
         'heartbeatToken': 'heartbeat',
 		'heartbeatTimeout': 4000,//miliseconds
 		'busFileServerBaseUrl': 'https://10.11.12.200/fileserver/',
-		'layout': getURLParameter('layout') || 'es',
+		'layout': app.data.layout,
 		'clientOffset': {
 			'x': 0,
 			'y': 0
@@ -268,7 +277,7 @@ function start () {
 		'externalClipboardHandling': false,
 		'disableClipboard': true,
 		'layer': document.getElementById('testVdi'),
-		'vmInfoToken': getURLParameter('vmInfoToken')
+		'vmInfoToken': app.data.vminfotoken
 		//'language': navigator.language
 	});
 }

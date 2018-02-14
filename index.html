@@ -129,16 +129,28 @@ must display the words "Powered by eyeos" and retain the original copyright noti
         <link rel="stylesheet" type="text/css" href="node_modules/font-awesome/css/font-awesome.min.css">
     </head>
     <body>
-        <div id="login" class=""
+
+        <div id="toolbar" class=""
              onMouseOver="app.showMenuBar();"
              onMouseOut="app.hideMenuBar();">
             <span class="logo"></span>
+
+            <form id="login" onSubmit="app.loginFormConnect();return false;">
+                <input type="text" id="host" class="tr-ph-host_lbl">
+                <input type="text" id="port" class="tr-ph-password_lbl">
+                <input type="pasword" id="password" class="tr-ph-password_lbl">
+                <!-- <label for="kb_layout"><i class="fa fa-keyboard-o"></i></label> -->
+                <i class="fa fa-plug" id='connect_button'
+                   onclick="app.loginFormConnect();"></i>
+                <input type="submit" style="display: none">
+            </form>
+
             <div class="float-right">
-                <i class="fa fa-thumb-tack pinned" id="pin"
+                <i class="fa fa-thumb-tack pinned tr-ti-menubarbutton" id="pin"
                    onclick="app.toggleMenuBar();"></i>
-                <i class="fa fa-arrows-alt" id="set-fullscreen"
+                <i class="fa fa-arrows-alt tr-ti-fullscreen" id="set-fullscreen"
                    onclick="app.toggleFullScreen();"></i>
-                <i class="fa fa-window-close"
+                <i class="fa fa-window-close tr-ti-closesession"
                    onclick="app.showCloseDialog()"></i>
                 <i class="fa fa-ellipsis-h" id="more-commands-toggle"
                    onclick="app.moreCommands();"></i>
@@ -150,6 +162,11 @@ must display the words "Powered by eyeos" and retain the original copyright noti
         </div>
 
         <div id="overlay"></div>
+
+        <div id="error" class="overlay-dialog">
+            <div id="error-text" class="overlay-text-end">
+            </div>
+        </div>
 
         <div id="dialog-close" class="overlay-dialog">
             <div id="dialog_close_text" class="overlay-text"></div>

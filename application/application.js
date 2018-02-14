@@ -7,27 +7,27 @@ Contact Jose Carlos Norte (jose@eyeos.com) for more information about this softw
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU Affero General Public License version 3 as published by the
 Free Software Foundation.
- 
+
 This program is distributed in the hope that it will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
 details.
- 
+
 You should have received a copy of the GNU Affero General Public License
-version 3 along with this program in the file "LICENSE".  If not, see 
+version 3 along with this program in the file "LICENSE".  If not, see
 <http://www.gnu.org/licenses/agpl-3.0.txt>.
- 
+
 See www.eyeos.org for more details. All requests should be sent to licensing@eyeos.org
- 
+
 The interactive user interfaces in modified source and object code versions
 of this program must display Appropriate Legal Notices, as required under
 Section 5 of the GNU Affero General Public License version 3.
- 
+
 In accordance with Section 7(b) of the GNU Affero General Public License version 3,
 these Appropriate Legal Notices must retain the display of the "Powered by
-eyeos" logo and retain the original copyright notice. If the display of the 
+eyeos" logo and retain the original copyright notice. If the display of the
 logo is not reasonably feasible for technical reasons, the Appropriate Legal Notices
-must display the words "Powered by eyeos" and retain the original copyright notice. 
+must display the words "Powered by eyeos" and retain the original copyright notice.
  */
 
 Application = $.spcExtend(wdi.DomainObject, {
@@ -44,6 +44,16 @@ Application = $.spcExtend(wdi.DomainObject, {
     busProcess: null,
 	timeLapseDetector: null,
     isFS: false,
+    data: {
+        'host':        getURLParameter('host') || '',
+        'port':        getURLParameter('port') || 8000,
+        'protocol':    getURLParameter('protocol') || 'ws',
+        'password':    getURLParameter('password') || '',
+        'vmhost':      getURLParameter('vmhost') || false,
+        'vmport':      getURLParameter('vmPort') || false,
+        'layout':      getURLParameter('layout') || 'en',
+        'vminfotoken': getURLParameter('vmInfoToken') || null,
+    },
 
     init: function (c) {
         wdi.GlobalPool.init();
@@ -550,6 +560,39 @@ Application = $.spcExtend(wdi.DomainObject, {
         this.clientGui.inputManager.setCurrentWindow(wnd);
     },
 
+    loginFormConnect: function() {
+        $("#connect_button")
+            .removeClass('fa-plug')
+            .addClass('fa-refresh fa-spin');
+        this.data.host = $('#host').val();
+        this.data.port = $('#port').val();
+        this.data.password = $('#password').val();
+        this.data.layout = 'es';
+
+        doRun();
+    },
+
+    loginFormReadOnly: function(disabled) {
+        if (data = JSON.parse(readCookie("data"))) {
+            this.data = data;
+        }
+
+        $("#connect_button")
+            .addClass('fa-plug')
+            .removeClass('fa-refresh fa-spin');
+
+        if (disabled) {
+            $('#login').addClass('disabled');
+            $("#connect_button").hide();
+        } else {
+            $('#login').removeClass('disabled');
+            $("#connect_button").show();
+        }
+        $('#host').prop("disabled", disabled).val(this.data.host);
+        $('#port').prop("disabled", disabled).val(this.data.port);
+        $('#password').prop("disabled", disabled).val(this.data.password);
+    },
+
     toggleFullScreen: function() {
         var elem_fs    = document.body,
             availa_fs  = document.fullscreenEnabled
@@ -569,11 +612,11 @@ Application = $.spcExtend(wdi.DomainObject, {
             if (this.isFS) {
                 this.isFS = false;
                 cancel_fs.call(document);
-                $("#login #set-fullscreen").removeClass("pinned");
+                $("#toolbar #set-fullscreen").removeClass("pinned");
             } else {
                 this.isFS = true;
                 request_fs.call(elem_fs);
-                $("#login #set-fullscreen").addClass("pinned");
+                $("#toolbar #set-fullscreen").addClass("pinned");
             }
         } else {
             alert(tr["no_auto_fs"]);
@@ -582,18 +625,18 @@ Application = $.spcExtend(wdi.DomainObject, {
 
     toggleMenuBar: function() {
         if (!this.isMenuBarPinned()) {
-            $("#login").attr("class", "");
-            $("#login #pin").addClass("pinned");
+            $("#toolbar").attr("class", "");
+            $("#toolbar #pin").addClass("pinned");
             this.resizeScreen();
         } else {
-            $("#login").addClass("hidden");
-            $("#login #pin").removeClass("pinned");
+            $("#toolbar").addClass("hidden");
+            $("#toolbar #pin").removeClass("pinned");
             this.resizeScreen();
         }
     },
 
     isMenuBarPinned: function() {
-        if ($("#login #pin").hasClass("pinned")) {
+        if ($("#toolbar #pin").hasClass("pinned")) {
             return true
         } else {
             return false;
@@ -624,14 +667,14 @@ Application = $.spcExtend(wdi.DomainObject, {
     },
 
     showMenuBar: function() {
-        if ($("#login").hasClass("hidden")) {
-            $("#login").attr("class", "").addClass("hidden-peek");
+        if ($("#toolbar").hasClass("hidden")) {
+            $("#toolbar").attr("class", "").addClass("hidden-peek");
         }
     },
 
     hideMenuBar: function() {
-        if ($("#login").hasClass("hidden-peek")) {
-            $("#login").attr("class", "").addClass('hidden');
+        if ($("#toolbar").hasClass("hidden-peek")) {
+            $("#toolbar").attr("class", "").addClass('hidden');
         }
     },
 
@@ -644,10 +687,7 @@ Application = $.spcExtend(wdi.DomainObject, {
         if (this.isFS) {
             this.toggleFullScreen();
         }
-
-        $("#overlay").css("visibility", "visible");
-        $("#overlay").css("opacity", "1");
-        $("#dialog-end").css("visibility", "visible");
+        this.loginFormReadOnly(false);
     },
 
     showCloseDialog: function() {
